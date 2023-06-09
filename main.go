@@ -1,11 +1,13 @@
 package main
 
 import (
-	"fmt"
-
-	"github.com/JanaSabuj/concurrent-file-downloader/util"
+	"github.com/JanaSabuj/concurrent-file-downloader/manager"
 )
 
 func main() {
-	fmt.Println(util.Motd)
+	// init Download Request
+	manager.Init()
+
+	// call Manager to download the file
+
 }
