@@ -42,8 +42,8 @@ func (d *DownloadRequest) Download(idx int, byteChunk [2]int) error {
 	// make GET request with range
 	method := "GET"
 	headers := map[string]string{
-		// "User-Agent": "CFD Downloader",
-		"Range": fmt.Sprintf("bytes=%v-%v", byteChunk[0], byteChunk[1]),
+		"User-Agent": "CFD Downloader",
+		"Range":      fmt.Sprintf("bytes=%v-%v", byteChunk[0], byteChunk[1]),
 	}
 	resp, err := d.HttpClient.Do(method, d.Url, headers)
 	if err != nil {
@@ -100,7 +100,7 @@ func (d *DownloadRequest) MergeDownloads() error {
 }
 
 func (d *DownloadRequest) CleanupTmpFiles() error {
-	log.Println("Starting to clean ip tmp downloaded files...")
+	log.Println("Starting to clean tmp downloaded files...")
 
 	// delete each chunk file
 	for idx := 0; idx < d.Chunks; idx++ {

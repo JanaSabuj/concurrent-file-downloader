@@ -45,6 +45,7 @@ func (c *HTTPClient) NewRequest(method, url string, headers map[string]string, b
 	return req, nil
 }
 
+// User function
 func (c *HTTPClient) Do(method string, url string, headers map[string]string) (*http.Response, error) {
 	req, err := c.NewRequest(method, url, headers, nil)
 	if err != nil {

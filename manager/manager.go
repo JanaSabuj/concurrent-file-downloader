@@ -7,7 +7,6 @@ import (
 	"strconv"
 	"sync"
 
-	"github.com/JanaSabuj/concurrent-file-downloader/cli"
 	"github.com/JanaSabuj/concurrent-file-downloader/greenhttp"
 	"github.com/JanaSabuj/concurrent-file-downloader/models"
 	"github.com/JanaSabuj/concurrent-file-downloader/util"
@@ -45,7 +44,7 @@ func Run(urlPtr *url.URL) {
 	log.Println("Content-Length:", contentLengthInBytes)
 
 	// get file name
-	fname, err := cli.ExtractFileName(url)
+	fname, err := util.ExtractFileName(url)
 	if err != nil {
 		log.Fatal("Error extracting filename...")
 	}
