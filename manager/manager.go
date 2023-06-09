@@ -86,7 +86,7 @@ func Run(urlPtr *url.URL) {
 			}
 		}(idx, byteChunk)
 	}
-	wg.Wait()
+	wg.Wait() // wait for all goroutines to finish
 
 	// merge
 	err = downReq.MergeDownloads()
