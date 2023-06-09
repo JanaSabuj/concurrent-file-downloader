@@ -5,3 +5,7 @@ type DownloadRequest struct {
 	FileName string
 	Chunks   int
 }
+
+func (d *DownloadRequest) SplitChunks() {
+
+}
