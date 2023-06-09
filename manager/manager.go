@@ -18,7 +18,7 @@ func Init() {
 }
 
 func End() {
-	// fmt.Println(util.EndMotd)
+	fmt.Println(util.EndMotd)
 }
 
 func Run(urlPtr *url.URL) {
@@ -74,7 +74,7 @@ func Run(urlPtr *url.URL) {
 	byteRangeArray = downReq.SplitIntoChunks()
 	fmt.Println(byteRangeArray)
 
-	// Download each chunk concurrently
+	// download each chunk concurrently
 	var wg sync.WaitGroup
 	for idx, byteChunk := range byteRangeArray {
 		wg.Add(1) // add wait before goroutine invocation
@@ -92,6 +92,15 @@ func Run(urlPtr *url.URL) {
 	// merge
 	err = downReq.MergeDownloads()
 	if err != nil {
-		log.Fatal("Failed merging tmp downloaded files...")
+		log.Fatal("Failed merging tmp downloaded files...", err)
 	}
+
+	// cleanup
+	err = downReq.CleanupTmpFiles()
+	if err != nil {
+		log.Fatal("Failed cleaning up tmp downloaded files...", err)
+	}
+
+	// final file generated
+	log.Println(fmt.Sprintf("File generated: %v\n\n", downReq.FileName))
 }

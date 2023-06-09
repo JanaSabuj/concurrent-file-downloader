@@ -80,6 +80,7 @@ func (d *DownloadRequest) MergeDownloads() error {
 	}
 	defer out.Close()
 
+	// append each chunk to final file
 	for idx := 0; idx < d.Chunks; idx++ {
 		fname := fmt.Sprintf("%v-%v.tmp", util.TMP_FILE_PREFIX, idx)
 		in, err := os.Open(fname)
@@ -94,6 +95,21 @@ func (d *DownloadRequest) MergeDownloads() error {
 		}
 	}
 
-	fmt.Println("File chunks merged successfully")
+	fmt.Println("File chunks merged successfully...")
+	return nil
+}
+
+func (d *DownloadRequest) CleanupTmpFiles() error {
+	log.Println("Starting to clean ip tmp downloaded files...")
+
+	// delete each chunk file
+	for idx := 0; idx < d.Chunks; idx++ {
+		fname := fmt.Sprintf("%v-%v.tmp", util.TMP_FILE_PREFIX, idx)
+		err := os.Remove(fname)
+		if err != nil {
+			return fmt.Errorf("Failed to open chunk file %s: %v", fname, err)
+		}
+	}
+
 	return nil
 }
