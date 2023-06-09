@@ -6,6 +6,6 @@ import (
 	"github.com/JanaSabuj/concurrent-file-downloader/util"
 )
 
-func Run() {
+func Init() {
 	fmt.Println(util.Motd)
 }
