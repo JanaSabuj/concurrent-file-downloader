@@ -5,6 +5,7 @@ import (
 	"log"
 	"net/url"
 	"strconv"
+	"sync"
 
 	"github.com/JanaSabuj/concurrent-file-downloader/cli"
 	"github.com/JanaSabuj/concurrent-file-downloader/greenhttp"
@@ -39,7 +40,7 @@ func Run(urlPtr *url.URL) {
 	contentLength := resp.Header.Get("Content-Length")
 	contentLengthInBytes, err := strconv.Atoi(contentLength)
 	if err != nil {
-		log.Fatal("Unsupported file download type.... Empty size sent by server", err)
+		log.Fatal("Unsupported file download type.... Empty size sent by server ", err)
 	}
 	log.Println("Content-Length:", contentLengthInBytes)
 
@@ -58,17 +59,39 @@ func Run(urlPtr *url.URL) {
 	chunksize := contentLengthInBytes / chunks
 	log.Println("Each chunk size: ", chunksize)
 
-	// create the download object
-	downReq := models.DownloadRequest{
-		Url:      url,
-		FileName: fname,
-		Chunks:   chunks,
+	// create the downloadRequest object
+	downReq := &models.DownloadRequest{
+		Url:        url,
+		FileName:   fname,
+		Chunks:     chunks,
+		Chunksize:  chunksize,
+		TotalSize:  contentLengthInBytes,
+		HttpClient: client,
 	}
 
 	// chunk it up
-	// downReq.SplitIntoChunks()
+	byteRangeArray := make([][2]int, chunks)
+	byteRangeArray = downReq.SplitIntoChunks()
+	fmt.Println(byteRangeArray)
 
-	// get each chunk concurrently
+	// Download each chunk concurrently
+	var wg sync.WaitGroup
+	for idx, byteChunk := range byteRangeArray {
+		wg.Add(1) // add wait before goroutine invocation
+
+		go func(idx int, byteChunk [2]int) {
+			defer wg.Done() // defer done at start of goroutine
+			err := downReq.Download(idx, byteChunk)
+			if err != nil {
+				log.Fatal(fmt.Sprintf("Failed to download chunk %v", idx), err)
+			}
+		}(idx, byteChunk)
+	}
+	wg.Wait()
 
 	// merge
+	err = downReq.MergeDownloads()
+	if err != nil {
+		log.Fatal("Failed merging tmp downloaded files...")
+	}
 }

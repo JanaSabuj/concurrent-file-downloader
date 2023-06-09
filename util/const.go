@@ -9,3 +9,6 @@ const EndMotd = "88888888888 888    888        d8888 888b    888 888    d8P     
 
 // worker
 const WORKER_ROUTINES = 10
+
+// file
+const TMP_FILE_PREFIX = "tmpfile"
