@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"log"
 
 	"github.com/JanaSabuj/concurrent-file-downloader/cli"
@@ -11,6 +10,7 @@ import (
 func main() {
 	// init motd
 	manager.Init()
+	defer manager.End()
 
 	// get URL as input from user to download
 	url, err := cli.GetURLFromUser()
@@ -19,5 +19,5 @@ func main() {
 	}
 
 	// call Manager to download the file
-	fmt.Println(url.Host)
+	manager.Run(url)
 }
