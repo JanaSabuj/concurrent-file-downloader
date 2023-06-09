@@ -12,3 +12,6 @@ const WORKER_ROUTINES = 10 // can be increased acc to usecase
 
 // file
 const TMP_FILE_PREFIX = "tmpfile"
+
+// header
+const CONTENT_LENGTH_HEADER = "Content-Length"

@@ -36,7 +36,7 @@ func Run(urlPtr *url.URL) {
 	}
 
 	// get Content-Length
-	contentLength := resp.Header.Get("Content-Length")
+	contentLength := resp.Header.Get(util.CONTENT_LENGTH_HEADER)
 	contentLengthInBytes, err := strconv.Atoi(contentLength)
 	if err != nil {
 		log.Fatal("Unsupported file download type.... Empty size sent by server ", err)
