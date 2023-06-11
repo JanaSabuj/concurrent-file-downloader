@@ -107,7 +107,7 @@ func (d *DownloadRequest) CleanupTmpFiles() error {
 		fname := fmt.Sprintf("%v-%v.tmp", util.TMP_FILE_PREFIX, idx)
 		err := os.Remove(fname)
 		if err != nil {
-			return fmt.Errorf("Failed to open chunk file %s: %v", fname, err)
+			return fmt.Errorf("Failed to remove chunk file %s: %v", fname, err)
 		}
 	}
 
